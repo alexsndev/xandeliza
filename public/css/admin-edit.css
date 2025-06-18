@@ -1,0 +1,88 @@
+.edit-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: rgba(37, 99, 235, 0.9);
+    border-radius: 9999px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+/* Posicionamento específico para cada seção */
+#services .edit-indicator {
+    top: 2rem;
+    right: 2rem;
+}
+
+#packages .edit-indicator {
+    top: 2rem;
+    right: 2rem;
+}
+
+#about .edit-indicator {
+    top: 2rem;
+    right: 2rem;
+}
+
+#contact .edit-indicator {
+    top: 2rem;
+    right: 2rem;
+}
+
+.edit-indicator:hover {
+    background-color: rgba(29, 78, 216, 0.95);
+    transform: scale(1.1);
+}
+
+.edit-indicator i {
+    color: white;
+    font-size: 0.875rem;
+}
+
+.editable-section {
+    position: relative;
+}
+
+.editable-section:hover .edit-indicator {
+    display: flex;
+}
+
+/* Estilo para os botões do admin */
+.admin-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+}
+
+.admin-button:hover {
+    background-color: #1d4ed8;
+}
+
+.admin-button:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #93c5fd;
+}
+
+.admin-button.secondary {
+    background-color: #4b5563;
+}
+
+.admin-button.secondary:hover {
+    background-color: #374151;
+}
