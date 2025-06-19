@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SiteConfig;
 use App\Models\Banner;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,6 +16,7 @@ class HomeController extends Controller
     {
         $configs = SiteConfig::pluck('value', 'key')->toArray();
         $banners = Banner::where('is_active', true)->orderBy('order')->get();
+        $categories = Category::where('is_active', true)->orderBy('order')->get();
         
         $packages = [
             'essential' => [
@@ -55,6 +57,6 @@ class HomeController extends Controller
             ]
         ];
         
-        return view('welcome', compact('configs', 'packages', 'banners'));
+        return view('welcome', compact('configs', 'packages', 'banners', 'categories'));
     }
 }
