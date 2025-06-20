@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\SiteConfig;
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Gallery;
+use App\Models\Experience;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -17,7 +21,10 @@ class HomeController extends Controller
         $configs = SiteConfig::pluck('value', 'key')->toArray();
         $banners = Banner::where('is_active', true)->orderBy('order')->get();
         $categories = Category::where('is_active', true)->orderBy('order')->get();
-        
+        $galleries = Gallery::where('is_active', true)->orderBy('order')->get();
+        $experiences = Experience::where('is_active', true)->orderBy('order')->get();
+        $productCategories = ProductCategory::where('is_active', true)->get();
+        $products = Product::where('is_active', true)->get();
         $packages = [
             'essential' => [
                 'name' => 'Pacote Essencial',
@@ -57,6 +64,6 @@ class HomeController extends Controller
             ]
         ];
         
-        return view('welcome', compact('configs', 'packages', 'banners', 'categories'));
+        return view('welcome', compact('configs', 'packages', 'banners', 'categories', 'galleries', 'experiences', 'productCategories', 'products'));
     }
 }

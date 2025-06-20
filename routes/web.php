@@ -58,9 +58,16 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
         Route::post('banners/{banner}/toggle', [App\Http\Controllers\Admin\BannerController::class, 'toggleStatus'])->name('banners.toggle');
         Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+        Route::resource('galleries', App\Http\Controllers\Admin\GalleryController::class);
+        Route::post('galleries/{gallery}/toggle', [App\Http\Controllers\Admin\GalleryController::class, 'toggleStatus'])->name('galleries.toggle');
+        Route::resource('experiences', App\Http\Controllers\Admin\ExperienceController::class);
+        Route::post('experiences/{experience}/toggle', [App\Http\Controllers\Admin\ExperienceController::class, 'toggleStatus'])->name('experiences.toggle');
         Route::get('/site-config', [App\Http\Controllers\SiteConfigController::class, 'index'])->name('site-config.index');
         Route::post('/site-config', [App\Http\Controllers\SiteConfigController::class, 'update'])->name('site-config.update');
     });
 });
+
+// Rota AJAX para toggles do painel de engrenagem
+Route::middleware(['auth', 'role:admin'])->post('/api/site-config/toggle-section', [\App\Http\Controllers\SiteConfigController::class, 'toggleSection']);
 
 require __DIR__.'/auth.php';

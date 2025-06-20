@@ -32,6 +32,16 @@
         </style>
     </head>
     <body class="bg-gray-100">
+        @if(auth()->check() && auth()->user()->role === 'admin')
+            <div style="background: #222; color: #fff; padding: 8px 16px; font-size: 14px; z-index:9999;">
+                <b>DEBUG VISUAL (configs show_*):</b>
+                @foreach($configs as $k => $v)
+                    @if(Str::startsWith($k, 'show_'))
+                        <span style="margin-right: 12px;">{{ $k }}: <b>{{ $v }}</b></span>
+                    @endif
+                @endforeach
+            </div>
+        @endif
         <!-- Header/Nav -->
         <header class="text-white fixed w-full top-0 z-50 shadow-lg" style="background-color: {{ $configs['public_header_color'] ?? '#111827' }}">
             <div class="container mx-auto px-4 py-3 flex items-center justify-between min-h-16">
@@ -61,7 +71,7 @@
                                 <li><a href="{{ url('/dashboard') }}" class="px-3 py-1 rounded nav-link-custom">Dashboard</a></li>
                                 @if(auth()->user()->role === 'admin')
                                     <li>
-                                        <div class="relative group">
+                                        <div class="relative group inline-block">
                                             <button class="flex items-center gap-2 px-3 py-1 rounded hover:bg-neutral-800 transition-colors text-xs" id="colorDropdownBtn">
                                                 <i class="fas fa-palette"></i> Cores do Site <i class="fas fa-caret-down"></i>
                                             </button>
@@ -95,6 +105,49 @@
                                                                onchange="updateNavColor(this.value, 'primary_button_color')">
                                                         <span class="text-sm text-gray-800">Botão</span>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="relative group inline-block">
+                                            <button class="flex items-center gap-2 px-3 py-1 rounded hover:bg-neutral-800 transition-colors text-xs" id="sectionToggleBtn">
+                                                <i class="fas fa-cog"></i> <span class="hidden md:inline">Seções do Site</span> <i class="fas fa-caret-down"></i>
+                                            </button>
+                                            <div class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-lg p-4 z-50 hidden group-hover:block" id="sectionToggleMenu" style="color: #222; min-width: 220px;">
+                                                <div class="flex flex-col gap-3">
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_hero" @if(!empty($configs['show_hero']) && $configs['show_hero']=='1') checked @endif>
+                                                        <span>Hero</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_banners" @if(!empty($configs['show_banners']) && $configs['show_banners']=='1') checked @endif>
+                                                        <span>Banner</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_galleries" @if(!empty($configs['show_galleries']) && $configs['show_galleries']=='1') checked @endif>
+                                                        <span>Galeria</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_experiences" @if(!empty($configs['show_experiences']) && $configs['show_experiences']=='1') checked @endif>
+                                                        <span>Experiências</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_products" @if(!empty($configs['show_products']) && $configs['show_products']=='1') checked @endif>
+                                                        <span>Produtos</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_packages" @if(!empty($configs['show_packages']) && $configs['show_packages']=='1') checked @endif>
+                                                        <span>Pacotes</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_about" @if(!empty($configs['show_about']) && $configs['show_about']=='1') checked @endif>
+                                                        <span>Sobre</span>
+                                                    </label>
+                                                    <label class="flex items-center gap-2 cursor-pointer">
+                                                        <input type="checkbox" class="section-switch" data-key="show_contact" @if(!empty($configs['show_contact']) && $configs['show_contact']=='1') checked @endif>
+                                                        <span>Contato</span>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -209,6 +262,17 @@
                     </div>
                 </div>
             </section>
+            @if (!empty($configs['show_products']) && $configs['show_products'] == '1')
+                @include('components.products-section', ['productCategories' => $productCategories, 'products' => $products])
+            @endif
+            {{-- Experiências --}}
+            @if (!empty($configs['show_experiences']) && $configs['show_experiences'] == '1')
+                @include('components.experiences-section', ['experiences' => $experiences])
+            @endif
+            {{-- Galeria --}}
+            @if (!empty($configs['show_galleries']) && $configs['show_galleries'] == '1')
+                @include('components.galleries-section', ['galleries' => $galleries])
+            @endif
             <!-- Pacotes -->
             <section id="packages" class="py-20 bg-white">
                 <div class="container mx-auto">
@@ -501,6 +565,46 @@
                     }
                 });
             }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // ... já existente ...
+                // Dropdown de seções
+                const sectionToggleBtn = document.getElementById('sectionToggleBtn');
+                const sectionToggleMenu = document.getElementById('sectionToggleMenu');
+                if(sectionToggleBtn && sectionToggleMenu) {
+                    sectionToggleBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        sectionToggleMenu.classList.toggle('hidden');
+                    });
+                    document.addEventListener('click', function(e) {
+                        if (!sectionToggleMenu.contains(e.target) && !sectionToggleBtn.contains(e.target)) {
+                            sectionToggleMenu.classList.add('hidden');
+                        }
+                    });
+                }
+                document.querySelectorAll('.section-switch').forEach(function(switchEl) {
+                    switchEl.addEventListener('change', function() {
+                        const key = this.dataset.key;
+                        const value = this.checked ? '1' : '0';
+                        fetch('/api/site-config/toggle-section', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ key, value })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.success) {
+                                // Opcional: feedback visual
+                            }
+                        });
+                    });
+                });
+            });
         </script>
     </body>
 </html>

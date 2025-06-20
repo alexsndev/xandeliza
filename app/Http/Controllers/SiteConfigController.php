@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class SiteConfigController extends Controller
 {
@@ -135,5 +136,30 @@ class SiteConfigController extends Controller
         ];
 
         return $titles[$section] ?? ucfirst($section);
+    }
+
+    /**
+     * Atualiza a visibilidade de uma seção via AJAX
+     */
+    public function toggleSection(Request $request)
+    {
+        $request->validate([
+            'key' => 'required|string',
+            'value' => 'required|in:0,1',
+        ]);
+        $key = $request->input('key');
+        $value = $request->input('value');
+        $config = SiteConfig::where('key', $key)->first();
+        if (!$config) {
+            // Se não existir, cria
+            $config = new SiteConfig();
+            $config->key = $key;
+            $config->type = 'text';
+        }
+        $config->value = $value;
+        $config->save();
+        // Limpa cache se necessário
+        Cache::forget('site_configs');
+        return response()->json(['success' => true]);
     }
 }

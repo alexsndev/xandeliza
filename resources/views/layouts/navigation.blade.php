@@ -25,7 +25,7 @@
                         
                         @if(Auth::user()->role === 'admin' || Auth::user()->role === 'gerente')
                             <x-nav-link :href="route('admin.site-config.index')" :active="request()->routeIs('admin.site-config.*')">
-                                {{ __('Configurações do Site') }}
+                                <i class="fas fa-cog"></i> {{ __('Configurações do Site') }}
                             </x-nav-link>
                         @endif
 
@@ -35,6 +35,14 @@
 
                         <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                             {{ __('Categorias') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.galleries.index')" :active="request()->routeIs('admin.galleries.*')">
+                            {{ __('Galeria') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.experiences.index')" :active="request()->routeIs('admin.experiences.*')">
+                            {{ __('Experiências') }}
                         </x-nav-link>
                     @endauth
                 </div>
@@ -109,7 +117,7 @@
                 
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'gerente')
                     <x-responsive-nav-link :href="route('admin.site-config.index')" :active="request()->routeIs('admin.site-config.*')">
-                        {{ __('Configurações do Site') }}
+                        <i class="fas fa-cog"></i> {{ __('Configurações do Site') }}
                     </x-responsive-nav-link>
                 @endif
 
@@ -119,6 +127,14 @@
 
                 <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                     {{ __('Categorias') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.galleries.index')" :active="request()->routeIs('admin.galleries.*')">
+                    {{ __('Galeria') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.experiences.index')" :active="request()->routeIs('admin.experiences.*')">
+                    {{ __('Experiências') }}
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('login')">

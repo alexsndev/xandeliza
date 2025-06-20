@@ -390,5 +390,25 @@ class SiteConfigsTableSeeder extends Seeder
             'label' => 'Cor do Botão Enviar Mensagem',
             'order' => 4
         ]);
+
+        $toggles = [
+            'show_hero' => 'Hero',
+            'show_banners' => 'Banner',
+            'show_galleries' => 'Galeria',
+            'show_experiences' => 'Experiências',
+            'show_products' => 'Produtos',
+            'show_packages' => 'Pacotes',
+            'show_about' => 'Sobre',
+            'show_contact' => 'Contato',
+        ];
+        foreach ($toggles as $key => $label) {
+            SiteConfig::firstOrCreate([
+                'key' => $key
+            ], [
+                'value' => '0',
+                'type' => 'text',
+                'label' => $label,
+            ]);
+        }
     }
 }
